@@ -1,0 +1,18 @@
+services:
+  omniroute:
+    build: .
+    container_name: omniroute-gateway
+    restart: unless-stopped
+    ports:
+      - "20128:20128"
+    environment:
+      - PORT=20128
+      - HOST=0.0.0.0
+      - OMNIROUTE_API_KEY=omniroute-local-secret
+      - OMNIROUTE_DEFAULT_MODEL=auto
+      - OMNIROUTE_TIMEOUT_MS=30000
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:20128/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
